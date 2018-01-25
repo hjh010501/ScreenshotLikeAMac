@@ -94,13 +94,15 @@ namespace ScreenshotLikeAMac.ShotWindow
         static GlobalKeyHook hook = new GlobalKeyHook();
         public static GlobalKeyHook Hook => hook;
 
-        public event EventHandler<GlobalKeyHookEventArgs> KeyboardPressed;
+        public event EventHandler<GlobalKeyHookEventArgs> KeyboardDown;
 
         IntPtr windowsHookHandle;
         IntPtr user32LibraryHandle;
         HookProc hookProc;
 
         delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+        public bool Pressing = false;
 
         GlobalKeyHook()
         {
@@ -128,14 +130,20 @@ namespace ScreenshotLikeAMac.ShotWindow
             bool fEatKeyStroke = false;
 
             var wparamTyped = wParam.ToInt32();
-            if (Enum.IsDefined(typeof(VKeyState), wparamTyped))
+
+           if(wparamTyped == 0x101 && Pressing == true)
+            {
+                Pressing = false;
+            }
+
+            if ( wparamTyped == 0x100 || wparamTyped == 0x104)
             {
                 object o = Marshal.PtrToStructure(lParam, typeof(LowLevelKeyInputArgs));
                 LowLevelKeyInputArgs p = (LowLevelKeyInputArgs)o;
 
                 var eventArguments = new GlobalKeyHookEventArgs(p, (VKeyState)wparamTyped);
 
-                EventHandler<GlobalKeyHookEventArgs> handler = KeyboardPressed;
+                EventHandler<GlobalKeyHookEventArgs> handler = KeyboardDown;
                 handler?.Invoke(this, eventArguments);
 
                 fEatKeyStroke = eventArguments.Handled;
@@ -185,11 +193,11 @@ namespace ScreenshotLikeAMac.ShotWindow
             GC.SuppressFinalize(this);
         }
 
-        public static bool IsKeyPressed(VKeyCode code)
+        public static bool IsKeyDown(VKeyCode code)
         {
-            return (GetKeyState(code) & 0x80) != 0;
+            return (GetKeyState(code) & 0x100) != 0;
         }
-
+        
         public static short GetKeyState(VKeyCode code)
         {
             return GetKeyState((int)code);

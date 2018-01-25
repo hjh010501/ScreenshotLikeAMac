@@ -26,7 +26,6 @@ namespace ScreenshotLikeAMac.ShotWindow
                     memoryGraphics.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size, CopyPixelOperation.SourceCopy);
                     captureBitmap.Save("Screenshot " + DateTime.Now.ToString("yyyy-MM-dd tt H.mm.ss") + ((i==1) ? "" : " (" + i + ")") + ".png", ImageFormat.Png);
                     i++;
-
                 }
 
             }

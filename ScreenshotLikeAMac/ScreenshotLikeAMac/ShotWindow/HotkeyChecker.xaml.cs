@@ -27,21 +27,20 @@ namespace ScreenshotLikeAMac.ShotWindow
         public HotkeyChecker()
         {
             InitializeComponent();
-            GlobalKeyHook.Hook.KeyboardPressed += Hook_KeyboardPressed;
+            GlobalKeyHook.Hook.KeyboardDown += Hook_KeyboardDown;
         }
 
-        void Hook_KeyboardPressed(object sender, GlobalKeyHookEventArgs e)
+        void Hook_KeyboardDown(object sender, GlobalKeyHookEventArgs e)
         {
 
             //System.Windows.MessageBox.Show(e.VKeyCode.ToString());
 
             if (e.VKeyCode == VKeyCode.Three)
             {
-                if (GlobalKeyHook.IsKeyPressed(VKeyCode.LeftAlt) && GlobalKeyHook.IsKeyPressed(VKeyCode.LeftShift))
+                if (GlobalKeyHook.IsKeyDown(VKeyCode.LeftAlt) && GlobalKeyHook.IsKeyDown(VKeyCode.LeftShift) && GlobalKeyHook.Hook.Pressing == false)
                 {
                     cap.CaptureMyScreen();
-                    
-
+                    GlobalKeyHook.Hook.Pressing = true;
                 }
             }
             System.Threading.Thread.Sleep(100);
