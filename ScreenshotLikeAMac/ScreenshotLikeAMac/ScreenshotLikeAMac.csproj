@@ -65,10 +65,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ShotWindow\SelectMouseCursor.xaml.cs">
+      <DependentUpon>SelectMouseCursor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>
     <Page Include="ShotWindow\HotkeyChecker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShotWindow\SelectMouseCursor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

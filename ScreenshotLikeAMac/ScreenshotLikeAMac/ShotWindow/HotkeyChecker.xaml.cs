@@ -22,6 +22,8 @@ namespace ScreenshotLikeAMac.ShotWindow
     public partial class HotkeyChecker : Window
     {
 
+        public static SelectMouseCursor SelectMouseCursor;
+
         Capture cap = new Capture();
 
         public HotkeyChecker()
@@ -43,7 +45,39 @@ namespace ScreenshotLikeAMac.ShotWindow
                     GlobalKeyHook.Hook.Pressing = true;
                 }
             }
-            System.Threading.Thread.Sleep(100);
+
+            if (e.VKeyCode == VKeyCode.Four)
+            {
+                if (GlobalKeyHook.IsKeyDown(VKeyCode.LeftAlt) && GlobalKeyHook.IsKeyDown(VKeyCode.LeftShift) && GlobalKeyHook.Hook.Pressing == false)
+                {
+                    if(SelectMouseCursor == null)
+                    {
+                        SelectMouseCursor = new SelectMouseCursor();
+                        SelectMouseCursor.Owner = App.Current.MainWindow;
+                        SelectMouseCursor.Closed += delegate
+                        {
+                            SelectMouseCursor = null;
+                        };
+                        SelectMouseCursor.Show();
+
+                    } else
+                    {
+                        SelectMouseCursor.Activate();
+                    }
+                    GlobalKeyHook.Hook.Pressing = true;
+
+                }
+            }
+
+            if(e.VKeyCode == VKeyCode.ESC)
+            {
+                if(SelectMouseCursor != null)
+                {
+                    SelectMouseCursor.Close();
+                    SelectMouseCursor = null;
+                }
+            }
+            
         }
     }
 }
