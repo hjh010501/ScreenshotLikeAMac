@@ -1,8 +1,6 @@
 # 📷 Screenshot Like A Mac
 
-I wanna screenshot my display like a mac.
-
-So I made.
+![](https://github.com/hjh010501/ScreenshotLikeAMac/blob/master/READMEIMAGE/main_image_1.jpg)
 
 If you have used mac, you know what I say. 😁lol😁
 
