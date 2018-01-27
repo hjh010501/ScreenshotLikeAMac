@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace ScreenshotLikeAMac.ShotWindow
     {
 
         public static SelectMouseCursor SelectMouseCursor;
+        public static ScreenshotLikeAMac.UI.Setting Setting;
 
         Capture cap = new Capture();
 
@@ -30,6 +32,17 @@ namespace ScreenshotLikeAMac.ShotWindow
         {
             InitializeComponent();
             GlobalKeyHook.Hook.KeyboardDown += Hook_KeyboardDown;
+            if(Properties.Settings.Default.savepath == "")
+            {
+                string defaultpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\screenshot";
+                DirectoryInfo screenshotfolder = new DirectoryInfo(defaultpath);
+                if(screenshotfolder.Exists == false)
+                {
+                    screenshotfolder.Create();
+                }
+                Properties.Settings.Default.savepath = defaultpath;
+                Properties.Settings.Default.Save();
+            }
         }
 
         void Hook_KeyboardDown(object sender, GlobalKeyHookEventArgs e)
@@ -69,10 +82,34 @@ namespace ScreenshotLikeAMac.ShotWindow
                 }
             }
 
-            if(e.VKeyCode == VKeyCode.ESC)
+            if (e.VKeyCode == VKeyCode.Six)
+            {
+                if (GlobalKeyHook.IsKeyDown(VKeyCode.LeftAlt) && GlobalKeyHook.IsKeyDown(VKeyCode.LeftShift) && GlobalKeyHook.Hook.Pressing == false)
+                {
+                    if (Setting == null)
+                    {
+                        Setting = new ScreenshotLikeAMac.UI.Setting();
+                        Setting.Owner = App.Current.MainWindow;
+                        Setting.Closed += delegate
+                        {
+                            Setting = null;
+                        };
+                        Setting.Show();
+
+                    }
+                    else
+                    {
+                        Setting.Activate();
+                    }
+                    GlobalKeyHook.Hook.Pressing = true;
+                }
+            }
+
+            if (e.VKeyCode == VKeyCode.ESC)
             {
                 if(SelectMouseCursor != null)
                 {
+                    MouseHook.stop();
                     SelectMouseCursor.Close();
                     SelectMouseCursor = null;
                 }

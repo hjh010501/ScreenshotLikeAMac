@@ -27,12 +27,11 @@ namespace ScreenshotLikeAMac.ShotWindow
                     captureBitmap = new Bitmap(screen.Bounds.Width, screen.Bounds.Height, PixelFormat.Format32bppArgb);
                     memoryGraphics = Graphics.FromImage(captureBitmap);
                     memoryGraphics.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size, CopyPixelOperation.SourceCopy);
-                    captureBitmap.Save("Screenshot " + DateTime.Now.ToString("yyyy-MM-dd tt H.mm.ss") + ((i==1) ? "" : " (" + i + ")") + ".png", ImageFormat.Png);
+                    captureBitmap.Save(Properties.Settings.Default.savepath + "\\" + DateTime.Now.ToString("yyyy-MM-dd tt H.mm.ss") + ((i==1) ? "" : " (" + i + ")") + ".png", ImageFormat.Png);
                     captureBitmap.Dispose();
                     memoryGraphics.Dispose();
                     i++;
                 }
-                
             }
             catch (Exception ex)
             {
@@ -47,10 +46,9 @@ namespace ScreenshotLikeAMac.ShotWindow
                 Bitmap captureBitmap = new Bitmap((int)Math.Abs(endx - startx), (int)Math.Abs(endy - starty), PixelFormat.Format32bppArgb);
                 Graphics memoryGraphics = Graphics.FromImage(captureBitmap);
                 memoryGraphics.CopyFromScreen((int)((startx > endx) ? endx : startx), (int)((starty > endy) ? endy : starty), 0, 0, new Size((int)Math.Abs(endx - startx), (int)Math.Abs(endy - starty)), CopyPixelOperation.SourceCopy);
-                captureBitmap.Save("Screenshot " + DateTime.Now.ToString("yyyy-MM-dd tt H.mm.ss") + ".png", ImageFormat.Png);
+                captureBitmap.Save(Properties.Settings.Default.savepath + "\\" + DateTime.Now.ToString("yyyy-MM-dd tt H.mm.ss") + ".png", ImageFormat.Png);
                 captureBitmap.Dispose();
                 memoryGraphics.Dispose();
-
             }
             catch (Exception ex)
             {

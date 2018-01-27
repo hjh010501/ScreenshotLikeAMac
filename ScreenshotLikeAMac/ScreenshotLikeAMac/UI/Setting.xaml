@@ -5,8 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScreenshotLikeAMac.UI"
         mc:Ignorable="d"
-        Title="Setting" Height="300" Width="300">
+        Title="Setting" Height="150" Width="300" WindowStyle="None" Background="#BFF6F6F6" MouseLeftButtonDown="Window_MouseLeftButtonDown" AllowsTransparency="True" Topmost="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <Window.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/CustomStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+        CaptionHeight="0" ResizeBorderThickness="5" NonClientFrameEdges="None" GlassFrameThickness="10" UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
     <Grid>
-        
+        <Grid Height="50" x:Name="Title" VerticalAlignment="Top">
+            <Rectangle Height="50" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="Setting" VerticalAlignment="Center" Foreground="#FF1A1A1A" FontFamily="Malgun Gothic" FontSize="14" FontWeight="Bold"/>
+            <Button x:Name="CloseButton" Style="{StaticResource ButtonStyle}" Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseButton_Click" Background="#00DFDFDF">
+                <Grid Width="16" Height="16" x:Name="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+                    <Rectangle Height="1" VerticalAlignment="Center" Fill="#FF1A1A1A" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="16">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="45"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle Height="1" VerticalAlignment="Center" Fill="#FF1A1A1A" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="16">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="135"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                </Grid>
+            </Button>
+        </Grid>
+        <Grid Margin="0,50,0,0">
+            <Grid VerticalAlignment="Top" Margin="15,25,15,0" >
+            <TextBox x:Name="savepath" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="240" BorderBrush="{x:Null}" Background="#7FFFFFFF" SelectionBrush="#FFEDEDED" BorderThickness="0" AllowDrop="False" Focusable="False" IsHitTestVisible="False" IsTabStop="False" SelectionOpacity="0" FontSize="16" Margin="0,25,0,0">
+                <TextBox.Effect>
+                    <DropShadowEffect Direction="270" Opacity="0.4" BlurRadius="35" ShadowDepth="2"/>
+                </TextBox.Effect>
+            </TextBox>
+            <TextBlock  TextWrapping="Wrap" Text="Savepath" Foreground="#FF1A1A1A" FontFamily="Malgun Gothic" FontSize="14" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold">
+                <TextBlock.Effect>
+                    <DropShadowEffect Direction="270" Opacity="0.4" BlurRadius="35" ShadowDepth="2"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button Content="..." Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,25,0,0" VerticalAlignment="Top" Width="30" Height="25" Foreground="#FF181818" Background="#A5F6F6F6" Click="Button_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Direction="270" Opacity="0.4" BlurRadius="35" ShadowDepth="2"/>
+                    </Button.Effect>
+                </Button>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ScreenshotLikeAMac.ShotWindow
 {
@@ -27,27 +30,31 @@ namespace ScreenshotLikeAMac.ShotWindow
             public int X;
             public int Y;
 
-            public static implicit operator Point(POINT point)
+            public static implicit operator System.Drawing.Point(POINT point)
             {
-                return new Point(point.X, point.Y);
+                return new System.Drawing.Point(point.X, point.Y);
             }
         }
 
-        /// <summary>
-        /// Retrieves the cursor's position, in screen coordinates.
-        /// </summary>
-        /// <see>See MSDN documentation for further information.</see>
         [DllImport("user32.dll")]
         public static extern bool GetCursorPos(out POINT lpPoint);
 
-        public static Point GetCursorPosition()
+        public static System.Drawing.Point GetCursorPosition()
         {
             POINT lpPoint;
             GetCursorPos(out lpPoint);
-            //bool success = User32.GetCursorPos(out lpPoint);
-            // if (!success)
-
             return lpPoint;
+        }
+
+        [DllImport("User32.dll")]
+        static extern IntPtr GetDC(IntPtr hwnd);
+
+        static void draw(System.Drawing.Rectangle rect, System.Drawing.Brush color, IntPtr hwnd)
+        {
+            using (Graphics g = Graphics.FromHdc(hwnd))
+            {
+                g.FillRectangle(color, rect);
+            }
         }
 
         Matrix m;
@@ -61,6 +68,8 @@ namespace ScreenshotLikeAMac.ShotWindow
 
         Capture cap = new Capture();
 
+        TranslateTransform CursorTranslate = new TranslateTransform();
+
         public SelectMouseCursor()
         {
             InitializeComponent();
@@ -71,8 +80,12 @@ namespace ScreenshotLikeAMac.ShotWindow
             MouseHook.MouseLeftDownAction += MouseHook_MouseLeftDownAction;
             MouseHook.MouseLeftUpAction += MouseHook_MouseLeftUpAction;
             MouseHook.Start();
-            this.Left = GetCursorPosition().X / dx - 13;
-            this.Top = GetCursorPosition().Y / dy - 13;
+
+            CursorTranslate.X = GetCursorPosition().X / dx - 13;
+            CursorTranslate.Y = GetCursorPosition().Y / dy - 13;
+
+            Cursor.RenderTransform = CursorTranslate;
+
             XTextblock.Text = (GetCursorPosition().X / dx).ToString();
             YTextblock.Text = (GetCursorPosition().Y / dy).ToString();
         }
@@ -80,12 +93,20 @@ namespace ScreenshotLikeAMac.ShotWindow
         private void MouseHook_MouseAction(object sender, EventArgs e)
         {
 
-            this.Left = GetCursorPosition().X / dx - 13;
-            this.Top = GetCursorPosition().Y / dy - 13;
+            CursorTranslate.X = GetCursorPosition().X / dx - 13;
+            CursorTranslate.Y = GetCursorPosition().Y / dy - 13;
+
+            Cursor.RenderTransform = CursorTranslate;
 
             XTextblock.Text = (capturing == false) ? (GetCursorPosition().X / dx).ToString() : (GetCursorPosition().X / dx).ToString() + " (" + Math.Abs(STARTPOINT.X - (GetCursorPosition().X / dx)) + ")" ;
-            YTextblock.Text = (capturing == false) ? (GetCursorPosition().Y / dy).ToString() : (GetCursorPosition().Y / dy).ToString() + " (" + Math.Abs(STARTPOINT.Y - (GetCursorPosition().Y / dx)) + ")";
+            YTextblock.Text = (capturing == false) ? (GetCursorPosition().Y / dy).ToString() : (GetCursorPosition().Y / dy).ToString() + " (" + Math.Abs(STARTPOINT.Y - (GetCursorPosition().Y / dy)) + ")";
 
+            if(capturing == true)
+            {
+                CursorArea.RenderTransform = new TranslateTransform((STARTPOINT.X > (GetCursorPosition().X / dx)) ? (GetCursorPosition().X / dx) : STARTPOINT.X, (STARTPOINT.Y > (GetCursorPosition().Y / dy)) ? (GetCursorPosition().Y / dy) : STARTPOINT.Y);
+                CursorArea.Width = Math.Abs(STARTPOINT.X - (GetCursorPosition().X / dx));
+                CursorArea.Height = Math.Abs(STARTPOINT.Y - (GetCursorPosition().Y / dy));
+            }
         }
 
         private void MouseHook_MouseLeftDownAction(object sender, EventArgs e)
@@ -102,10 +123,8 @@ namespace ScreenshotLikeAMac.ShotWindow
             capturing = false;
             MouseHook.stop();
             this.Hide();
-
             cap.CaptureArea(STARTPOINT.X * dx, STARTPOINT.Y * dy, ENDPOINT.X * dx, ENDPOINT.Y * dy);
             this.Close();
         }
-    
     }
 }

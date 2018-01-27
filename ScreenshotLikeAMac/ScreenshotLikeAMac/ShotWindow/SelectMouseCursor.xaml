@@ -4,8 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScreenshotLikeAMac.ShotWindow"
-        mc:Ignorable="d" Height="35" Width="100" Background="#02000000" Foreground="{x:Null}" ResizeMode="NoResize" ShowInTaskbar="False" WindowStyle="None" Cursor="None" AllowsTransparency="True" IsHitTestVisible="False" BorderThickness="0" Topmost="True">
-    <Grid IsHitTestVisible="False">
+        mc:Ignorable="d" Height="1000" Width="1000" Background="{x:Null}" Foreground="{x:Null}" ResizeMode="NoResize" ShowInTaskbar="False" WindowStyle="None" Cursor="None" AllowsTransparency="True" IsHitTestVisible="False" BorderThickness="0" Topmost="True" WindowState="Maximized">
+    <Grid>
+        <Rectangle x:Name="CursorArea" Fill="#3FFFFFFF" Stroke="White" Margin="0" Width="0" Height="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+    <Grid x:Name="Cursor" IsHitTestVisible="False" Width="100" Height="35" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Grid.CacheMode>
+            <BitmapCache EnableClearType="True"/>
+        </Grid.CacheMode>
+
         <Grid Width="26" Height="26" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Grid.Effect>
                 <DropShadowEffect ShadowDepth="0.5" Color="White" BlurRadius="1"/>
@@ -26,5 +32,6 @@
                 </TextBlock.Effect>
             </TextBlock>
         </Grid>
+    </Grid>
     </Grid>
 </Window>
